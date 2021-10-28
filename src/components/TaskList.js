@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useData } from "../providers/DataProvider";
 import { TaskItem } from "./TaskItem";
+import "./TaskList.css";
 
 export const TaskList = () => {
   const { data, setData } = useData();
@@ -22,13 +23,19 @@ export const TaskList = () => {
 
   const newTask = (name) => {
     const newTask = {
+      id: `${tasks.length + 1}`,
       isCompleted: false,
       name: name,
     };
-    setData((prev) => ({ ...prev, tasks: [...tasks, newTask] }));
+
+    setData((prev) => {
+      console.log(prev)
+      return ({ ...prev, tasks: [...tasks, newTask] })
+    });
   };
 
   const handleSubmit = (event) => {
+    setTextValue("");
     event.preventDefault();
     newTask(textValue);
   };
@@ -40,14 +47,15 @@ export const TaskList = () => {
 
   return (
     <article>
-      <form onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit}>
         <input
+          className="input"
           value={textValue}
           onChange={handleTextChange}
           type="text"
           placeholder="Task name"
         />
-        <button>Create Task</button>
+        <button className="button-17" >Create Task</button>
       </form>
 
       <ul>

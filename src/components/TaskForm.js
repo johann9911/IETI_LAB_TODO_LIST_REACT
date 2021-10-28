@@ -9,7 +9,8 @@ export const TaskForm = () => {
   const task = data.tasks.find((task) => task.id === taskId);
 
   const [text, setText] = useState(task?.name ?? "");
-
+  const [isChecked, SetChecked] = useState(!task?.isCompleted ?? false)
+  console.log(data.tasks);
   if (!task) {
     return <div>Task not found</div>;
   }
@@ -20,10 +21,16 @@ export const TaskForm = () => {
     setText(inputName);
   };
 
+  const handleInputChange = (e) => {
+    const isCompleted = e.target.checked
+
+    SetChecked(isCompleted);
+  }
+
   const handleSave = () => {
     const newTasks = data.tasks.map((task) => {
       if (task.id === taskId) {
-        return { ...task, name: text };
+        return { ...task, name: text, isCompleted: isChecked };
       }
 
       return task;
@@ -35,16 +42,17 @@ export const TaskForm = () => {
   };
 
   return (
-    <form>
+    <form className="form">
       <input
+        className="input"
         type="text"
         placeholder="Task Name"
         value={text}
         onChange={handleChange}
       />
-      <input type="checkbox" checked={task.isCompleted} />
+      <input type="checkbox" className="check" checked={isChecked} onChange={handleInputChange} />
 
-      <button type="button" onClick={handleSave}>
+      <button type="button" className="button-17" onClick={handleSave}>
         Save
       </button>
     </form>

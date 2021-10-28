@@ -9,7 +9,10 @@ export const TaskForm = () => {
   const task = data.tasks.find((task) => task.id === taskId);
 
   const [text, setText] = useState(task?.name ?? "");
-
+  const [desc, setTextDescValue] = useState(task?.description ?? "");
+  const [assig, setTextAssigValue] = useState(task?.assignedTo ?? "");
+  const [date, setTextDateValue] = useState(task?.dueDate ?? "");
+  console.log(data.tasks);
   if (!task) {
     return <div>Task not found</div>;
   }
@@ -20,33 +23,67 @@ export const TaskForm = () => {
     setText(inputName);
   };
 
-  const handleSave = () => {
+  const handleTextDescChange = (event) => {
+    const value = event.target.value;
+    setTextDescValue(value);
+  };
+
+  const handleTextAssigChange = (event) => {
+    const value = event.target.value;
+    setTextAssigValue(value);
+  };
+
+  const handleTextDateChange = (event) => {
+    const value = event.target.value;
+    setTextDateValue(value);
+  };
+
+  const handleSave = (event) => {
     const newTasks = data.tasks.map((task) => {
       if (task.id === taskId) {
-        return { ...task, name: text };
+        return { ...task, name: text, description: desc, assignedTo: assig, dueDate: date };
       }
 
       return task;
     });
 
     setData((prev) => ({ ...prev, tasks: newTasks }));
-
+    event.preventDefault();
     history.goBack();
   };
 
   return (
-    <form>
+
+    <form className="form" >
       <input
-        type="text"
-        placeholder="Task Name"
+        className="input"
         value={text}
         onChange={handleChange}
+        type="text"
+        placeholder="Task name"
       />
-      <input type="checkbox" checked={task.isCompleted} />
-
-      <button type="button" onClick={handleSave}>
-        Save
-      </button>
+      <input
+        className="input"
+        value={desc}
+        onChange={handleTextDescChange}
+        type="text"
+        placeholder="Task Description"
+      />
+      <input
+        className="input"
+        value={assig}
+        onChange={handleTextAssigChange}
+        type="text"
+        placeholder="Task Assigned to"
+      />
+      <input
+        className="input"
+        value={date}
+        onChange={handleTextDateChange}
+        type="text"
+        placeholder="Task Date"
+      />
+      <button className="button-17" onClick={handleSave}>Save</button>
     </form>
   );
 };

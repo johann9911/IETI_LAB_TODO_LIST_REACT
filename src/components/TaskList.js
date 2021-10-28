@@ -6,26 +6,20 @@ import "./TaskList.css";
 export const TaskList = () => {
   const { data, setData } = useData();
   const [textValue, setTextValue] = useState("");
+  const [textDesc, setTextDescValue] = useState("");
+  const [textAssig, setTextAssigValue] = useState("");
+  const [textDate, setTextDateValue] = useState("");
 
   const tasks = data.tasks;
-
-  const handleTaskChange = (index) => () => {
-    const newTasks = tasks.map((task, i) => {
-      if (i === index) {
-        return { ...task, isCompleted: !task.isCompleted };
-      }
-
-      return task;
-    });
-
-    setData((prev) => ({ ...prev, tasks: newTasks }));
-  };
 
   const newTask = (name) => {
     const newTask = {
       id: `${tasks.length + 1}`,
-      isCompleted: false,
+      status: "TODO",
       name: name,
+      description: textDesc,
+      assignedTo: textAssig,
+      dueDate: textDate,
     };
 
     setData((prev) => {
@@ -36,6 +30,9 @@ export const TaskList = () => {
 
   const handleSubmit = (event) => {
     setTextValue("");
+    setTextDescValue("");
+    setTextDateValue("");
+    setTextAssigValue("");
     event.preventDefault();
     newTask(textValue);
   };
@@ -43,6 +40,21 @@ export const TaskList = () => {
   const handleTextChange = (event) => {
     const value = event.target.value;
     setTextValue(value);
+  };
+
+  const handleTextDescChange = (event) => {
+    const value = event.target.value;
+    setTextDescValue(value);
+  };
+
+  const handleTextAssigChange = (event) => {
+    const value = event.target.value;
+    setTextAssigValue(value);
+  };
+
+  const handleTextDateChange = (event) => {
+    const value = event.target.value;
+    setTextDateValue(value);
   };
 
   return (
@@ -55,6 +67,27 @@ export const TaskList = () => {
           type="text"
           placeholder="Task name"
         />
+        <input
+          className="input"
+          value={textDesc}
+          onChange={handleTextDescChange}
+          type="text"
+          placeholder="Task Description"
+        />
+        <input
+          className="input"
+          value={textAssig}
+          onChange={handleTextAssigChange}
+          type="text"
+          placeholder="Task Assigned to"
+        />
+        <input
+          className="input"
+          value={textDate}
+          onChange={handleTextDateChange}
+          type="text"
+          placeholder="Task Date"
+        />
         <button className="button-17" >Create Task</button>
       </form>
 
@@ -63,9 +96,11 @@ export const TaskList = () => {
           return (
             <TaskItem
               id={task.id}
-              isChecked={task.isCompleted}
               taskName={task.name}
-              onTaskChange={handleTaskChange(index)}
+              taskDesc={task.description}
+              taskDate={task.dueDate}
+              taskStatus={task.status}
+              taskAssig={task.assignedTo}
             />
           );
         })}
